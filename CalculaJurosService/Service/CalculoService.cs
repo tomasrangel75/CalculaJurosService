@@ -1,14 +1,11 @@
 ﻿using CalculaJurosService.Infrastructure.DataTransferObjects;
 using CalculaJurosService.Infrastructure.Enums;
-using CalculaJurosService.Model.DTOs;
-using CalculaJurosService.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentValidation;
-using CalculaJurosService.Validators;
 using CalculaJurosService.Model;
+using CalculaJurosService.Model.DTOs;
+using CalculaJurosService.Validators;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CalculaJurosService.Service
 {
@@ -16,23 +13,38 @@ namespace CalculaJurosService.Service
     {
         public ObjectReplyDTO<object> CalculaJuros(CalculoValuesDto calcValues)
         {
-            ValidateDomain<CalculoValuesDto, CalculoValuesDtoValidator>(calcValues);
+            var validator = new CalculoValuesDtoValidator();
+            var results = validator.Validate(calcValues);
+
+            if (!results.IsValid)
+            {
+                var validatorResult = new ObjectReplyDTO<object>();
+                foreach (var failure in results.Errors)
+                {
+                    validatorResult.StatusReplyCode = ObjectReplyEnum.BusinessError;
+                    string msg = $"Propriedade : {failure.PropertyName} => Erro: {failure.ErrorMessage}";
+                    validatorResult.Message += msg; 
+                }
+                return validatorResult;
+            }
+
             return CalculoJurosCompostos(calcValues);
         }
 
         private ObjectReplyDTO<object> CalculoJurosCompostos(CalculoValuesDto calcValues)
         {
             var result = new ObjectReplyDTO<object>();
-            var financiamento = new Financiamento
-            {
-                Juros = GetJuros(),
-                Periodo = calcValues.Periodo,
-                ValorInicial = calcValues.ValorInicial
-            };
 
             try
             {
-                var valorTotal = financiamento.GetValorFinal();   
+                var financiamento = new Financiamento
+                {
+                    Juros = Convert.ToDouble(GetJuros().Result),
+                    Periodo = calcValues.Periodo,
+                    ValorInicial = calcValues.ValorInicial
+                };
+
+                var valorTotal = financiamento.GetValorFinal();
                 result.Message = $"Valor final para um periodo de {calcValues.Periodo} meses.";
                 result.ObjectReplyEntity = valorTotal;
                 result.StatusReplyCode = ObjectReplyEnum.Success;
@@ -47,9 +59,21 @@ namespace CalculaJurosService.Service
             return result;
         }
 
-        private double GetJuros()
+        private async Task<string> GetJuros()
         {
-            return 0.01;
+            using (var client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync("http://localhost:59432/Juros");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    throw new Exception("Taxa de juros inacessível!");
+                }
+            }
+
         }
     }
 }

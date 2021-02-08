@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace CalculaJurosService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/showmethecode")]
     [ApiController]
     public class CodeController : ControllerBase
     {
+        [HttpGet]
+        public ActionResult Get()
+        {
+            return Redirect("https://github.com/tomasrangel75/CalculaJurosService");
+        }
+
     }
 }
