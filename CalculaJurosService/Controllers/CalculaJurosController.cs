@@ -25,13 +25,8 @@ namespace CalculaJurosService.Controllers
         }
                 
         [HttpGet]
-        public ObjectReplyDTO<object>Get([FromQuery] double valorInicial, int periodo)
+        public ObjectReplyDTO<object>Get([FromQuery] CalculoValuesDto calcValues)
         {
-            var calcValues = new CalculoValuesDto
-            {
-                ValorInicial = valorInicial,
-                Periodo = periodo
-            };
             var result = _calculo.CalculaJuros(calcValues);
             return result;
         }
