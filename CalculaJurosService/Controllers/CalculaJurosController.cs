@@ -18,12 +18,11 @@ namespace CalculaJurosService.Controllers
         private readonly ILogger<CalculaJurosController> _logger;
         private readonly ICalculoService _calculo;
 
-        public CalculaJurosController(ILogger<CalculaJurosController> logger, ICalculoService calculo)
+        public CalculaJurosController(ICalculoService calculo)
         {
-            _logger = logger;
             _calculo = calculo;
         }
-                
+
         [HttpGet]
         public ObjectReplyDTO<object>Get([FromQuery] CalculoValuesDto calcValues)
         {
@@ -31,29 +30,5 @@ namespace CalculaJurosService.Controllers
             return result;
         }
 
-        // GET api/<CalculoController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<CalculoController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<CalculoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<CalculoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

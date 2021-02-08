@@ -11,12 +11,11 @@ namespace CalculaJurosService.Validators
     {
         public CalculoValuesDtoValidator()
         {
-            RuleFor(c => c.Periodo).NotNull()
-                .OnAnyFailure(q => { throw new ArgumentNullException(); });
-         
-            RuleFor(c => c.ValorInicial).NotNull()
-                .OnAnyFailure(q => { throw new ArgumentNullException(); });
-         
+            RuleFor(c => c.Periodo).NotNull();
+            RuleFor(c => c.ValorInicial).NotNull();
+            RuleFor(c => c.Periodo).NotNull().GreaterThan(0);
+            RuleFor(c => c.ValorInicial).NotNull().GreaterThan(0).LessThan(10000);
+  
         }
     }
 }
