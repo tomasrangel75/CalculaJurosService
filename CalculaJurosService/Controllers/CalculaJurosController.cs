@@ -1,6 +1,7 @@
 ﻿using CalculaJurosService.Infrastructure.DataTransferObjects;
 using CalculaJurosService.Infrastructure.Enums;
 using CalculaJurosService.Model.DTOs;
+using CalculaJurosService.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,6 +16,25 @@ namespace CalculaJurosService.Controllers
     public class CalculaJurosController : BaseController
     {
         private readonly ILogger<CalculaJurosController> _logger;
+        private readonly ICalculoService _calculo;
+
+        public CalculaJurosController(ILogger<CalculaJurosController> logger, ICalculoService calculo)
+        {
+            _logger = logger;
+            _calculo = calculo;
+        }
+                
+        [HttpGet]
+        public ObjectReplyDTO<object>Get([FromQuery] double valorInicial, int periodo)
+        {
+            var calcValues = new CalculoValuesDto
+            {
+                ValorInicial = valorInicial,
+                Periodo = periodo
+            };
+            var result = _calculo.CalculaJuros(calcValues);
+            return result;
+        }
 
         // GET api/<CalculoController>/5
         [HttpGet("{id}")]
