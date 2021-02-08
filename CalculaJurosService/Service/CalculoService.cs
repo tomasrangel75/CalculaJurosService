@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
+using CalculaJurosService.Validators;
+using CalculaJurosService.Model;
 
 namespace CalculaJurosService.Service
 {
@@ -13,24 +16,25 @@ namespace CalculaJurosService.Service
     {
         public ObjectReplyDTO<object> CalculaJuros(CalculoValuesDto calcValues)
         {
-            //this.ValidateDomain<AuthenticationDTO, AuthenticationValidator>(authenticationDTO);
+            ValidateDomain<CalculoValuesDto, CalculoValuesDtoValidator>(calcValues);
             return CalculoJurosCompostos(calcValues);
         }
 
         private ObjectReplyDTO<object> CalculoJurosCompostos(CalculoValuesDto calcValues)
         {
             var result = new ObjectReplyDTO<object>();
-            var valIni = calcValues.ValorInicial;
-            var m = calcValues.Periodo;
-            double j = 0.01f; // juros
+            var financiamento = new Financiamento
+            {
+                Juros = GetJuros(),
+                Periodo = calcValues.Periodo,
+                ValorInicial = calcValues.ValorInicial
+            };
 
             try
             {
-                var parc = valIni * (Math.Pow((1 + j), m) * j) / (Math.Pow((1 + j), m) - 1);
-                var valTotal = Math.Round((parc * m), 2);
-
+                var valorTotal = financiamento.GetValorFinal();   
                 result.Message = $"Valor final para um periodo de {calcValues.Periodo} meses.";
-                result.ObjectReplyEntity = valTotal;
+                result.ObjectReplyEntity = valorTotal;
                 result.StatusReplyCode = ObjectReplyEnum.Success;
             }
             catch (Exception ex)
@@ -42,6 +46,10 @@ namespace CalculaJurosService.Service
 
             return result;
         }
-       
+
+        private double GetJuros()
+        {
+            return 0.01;
+        }
     }
 }
