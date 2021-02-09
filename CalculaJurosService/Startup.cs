@@ -39,11 +39,11 @@ namespace CalculaJurosService
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c=>
+            app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Calcula Juros");
             });

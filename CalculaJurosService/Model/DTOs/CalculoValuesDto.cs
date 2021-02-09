@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CalculaJurosService.Model.DTOs
+﻿namespace CalculaJurosService.Model.DTOs
 {
     public class CalculoValuesDto
     {

@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  calculajurosservice:
+    image: ${DOCKER_REGISTRY-}calculajurosservice
+    ports: 
+    - "59991:80"
+    build:
+      context: .
+      dockerfile: CalculaJurosService/Dockerfile
+
+networks:
+  my-network:
+    external: true
+

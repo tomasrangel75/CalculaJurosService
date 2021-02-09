@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CalculaJurosService.Model.DTOs;
+﻿using CalculaJurosService.Model.DTOs;
 using FluentValidation;
 
 namespace CalculaJurosService.Validators
@@ -15,7 +11,7 @@ namespace CalculaJurosService.Validators
             RuleFor(c => c.ValorInicial).NotNull();
             RuleFor(c => c.Periodo).NotNull().GreaterThan(0);
             RuleFor(c => c.ValorInicial).NotNull().GreaterThan(0).LessThan(10000);
-  
+
         }
     }
 }

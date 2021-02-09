@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CalculaJurosService.Interface
+﻿namespace CalculaJurosService.Interface
 {
     public interface IFinanciamento
     {
@@ -11,6 +6,6 @@ namespace CalculaJurosService.Interface
         double Juros { get; set; }
         int Periodo { get; set; }
 
-        
+
     }
 }

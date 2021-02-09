@@ -23,7 +23,7 @@ namespace CalculaJurosService.Service
                 {
                     validatorResult.StatusReplyCode = ObjectReplyEnum.BusinessError;
                     string msg = $"Propriedade : {failure.PropertyName} => Erro: {failure.ErrorMessage}";
-                    validatorResult.Message += msg; 
+                    validatorResult.Message += msg;
                 }
                 return validatorResult;
             }
@@ -63,7 +63,7 @@ namespace CalculaJurosService.Service
         {
             using (var client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("http://localhost:59432/Juros");
+                HttpResponseMessage response = await client.GetAsync("http://host.docker.internal:59432/Juros");
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync();

@@ -1,12 +1,9 @@
 ﻿using CalculaJurosService.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CalculaJurosService.Model
 {
-    public class Financiamento: IFinanciamento, IModelBase
+    public class Financiamento : IFinanciamento, IModelBase
     {
         public int Id { get; set; }
         public double ValorInicial { get; set; }
@@ -20,7 +17,7 @@ namespace CalculaJurosService.Model
             var valTotal = Math.Round((parc * Periodo), 2);
             return valTotal;
         }
-   
+
 
     }
 }
